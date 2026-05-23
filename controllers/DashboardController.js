@@ -6,8 +6,9 @@ const getDashboardStats = async (req, res) => {
     const [[leaders]] = await db.promise().query(
       "SELECT COUNT(*) AS count FROM leaders WHERE isDeleted = 'false'"
     );
-    const [[groups]] = await db.promise().query('SELECT COUNT(*) AS count FROM Groups');
-    const [[activities]] = await db.promise().query('SELECT COUNT(*) AS count FROM activities');
+const [[groups]] = await db.promise().query(
+  'SELECT COUNT(*) AS count FROM `Groups`'
+);    const [[activities]] = await db.promise().query('SELECT COUNT(*) AS count FROM activities');
     const [[cards]] = await db.promise().query('SELECT COUNT(*) AS count FROM activity_cards');
 
     let pendingContacts = 0;
@@ -25,12 +26,12 @@ const getDashboardStats = async (req, res) => {
        FROM activities ORDER BY created_at DESC LIMIT 5`
     );
 
-    const [groupsBreakdown] = await db.promise().query(
-      `SELECT g.name AS group_name, COUNT(m.id) AS member_count
-       FROM Groups g
-       LEFT JOIN Members m ON m.group_id = g.id
-       GROUP BY g.id, g.name`
-    );
+  const [groupsBreakdown] = await db.promise().query(
+  `SELECT g.name AS group_name, COUNT(m.id) AS member_count
+   FROM \`Groups\` g
+   LEFT JOIN Members m ON m.group_id = g.id
+   GROUP BY g.id, g.name`
+);
 
     return res.status(200).json({
       members: members.count,

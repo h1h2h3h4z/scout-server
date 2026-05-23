@@ -95,19 +95,20 @@ const getMembers = async (req, res) => {
   };
   const getLeaders = async (req, res) => {
     try {
-      const query = `
-      SELECT 
-        leaders.id, 
-        leaders.name AS leaderName, 
-        leaders.email, 
-        leaders.phone, 
-        leaders.dateofbirth, 
-        leaders.photo, 
-        Groups.name AS teamName 
-      FROM leaders 
-      JOIN Groups ON leaders.id = Groups.leader_id WHERE leaders.isDeleted = 'false'
-      
-    `;      const [result] = await db.promise().query(query);
+     const query = `
+  SELECT 
+    leaders.id, 
+    leaders.name AS leaderName, 
+    leaders.email, 
+    leaders.phone, 
+    leaders.dateofbirth, 
+    leaders.photo, 
+    \`Groups\`.name AS teamName 
+  FROM leaders 
+  JOIN \`Groups\` ON leaders.id = \`Groups\`.leader_id 
+  WHERE leaders.isDeleted = 'false'
+`;
+    const [result] = await db.promise().query(query);
   
       if (result.length === 0) {
         return res.status(200).json([]);
